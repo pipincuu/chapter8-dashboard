@@ -11,10 +11,20 @@ app.set("layout", "layouts/default")
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use((req, res, next) => {
-    res.locals.contentName = null;
-    next();
-});
+const session = require("express-session");
+app.use(
+  session({
+    secret: "Rahasia",
+    resave: false,
+    saveUninitialized: false,
+  })
+)
+
+// Passport
+const passport = require("./lib/passport");
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 const router = require("./router");
 app.use(router); 
